@@ -10,8 +10,13 @@ local lexers = setmetatable({ }, {
       return require("syntaxhighlight.textadept." .. tostring(name))
     end)
     package.loaded.lexer = prev_mod
-    self[name] = mod or false
-    return self[name]
+    if success then
+      self[name] = mod
+      return self[name]
+    else
+      self[name] = false
+      return false
+    end
   end
 })
 local tag_tokens

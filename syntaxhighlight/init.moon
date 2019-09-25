@@ -9,10 +9,14 @@ lexers = setmetatable {}, {
     package.loaded.lexer = lexer_mod
     success, mod = pcall ->
       require("syntaxhighlight.textadept.#{name}")
-
     package.loaded.lexer = prev_mod
-    @[name] = mod or false
-    @[name]
+
+    if success
+      @[name] = mod
+      @[name]
+    else
+      @[name] = false
+      false
 }
 
 tag_tokens = (source, tokens) ->
