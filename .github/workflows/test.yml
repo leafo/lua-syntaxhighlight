@@ -22,6 +22,8 @@ jobs:
 
     - name: build
       run: |
+        luarocks install busted
+        luarocks install moonscript
         luarocks make
 
     - name: test
