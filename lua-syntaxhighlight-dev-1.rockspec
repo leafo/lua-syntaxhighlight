@@ -1,7 +1,7 @@
 package = "lua-syntaxhighlight"
 version = "dev-1"
 source = {
-  url = "git@github.com:leafo/lua-syntaxhighlight.git"
+  url = "git://github.com/leafo/lua-syntaxhighlight.git"
 }
 description = {
   homepage = "https://github.com/leafo/lua-syntaxhighlight",
