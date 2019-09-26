@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2014-2019 Joshua Krämer. See License.txt.
 -- Tcl LPeg lexer.
 -- This lexer follows the TCL dodekalogue (http://wiki.tcl.tk/10259).

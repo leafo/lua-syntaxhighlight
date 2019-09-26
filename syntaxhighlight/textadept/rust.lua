@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2015-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- Rust LPeg lexer.
 

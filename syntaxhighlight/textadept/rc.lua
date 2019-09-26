@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2017-2019 Michael Forney. See License.txt.
 -- rc LPeg lexer.
 

@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2015-2019 Mitchell mitchell.att.foicica.com. See License.txt.
 -- PowerShell LPeg lexer.
 -- Contributed by Jeff Stone.

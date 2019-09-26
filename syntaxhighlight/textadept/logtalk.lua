@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright © 2017-2019 Michael T. Richter <ttmrichter@gmail.com>. See License.txt.
 -- Logtalk LPeg lexer.
 

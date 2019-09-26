@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2014-2019 stef@ailleurs.land. See License.txt.
 -- Plain Texinfo version 5.2 LPeg lexer
 -- Freely inspired from Mitchell work and valuable help from him too !

@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2015-2019 David B. Lamkins <david@lamkins.net>. See License.txt.
 -- man/roff LPeg lexer.
 

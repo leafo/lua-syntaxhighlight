@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2016-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- Moonscript LPeg lexer.
 

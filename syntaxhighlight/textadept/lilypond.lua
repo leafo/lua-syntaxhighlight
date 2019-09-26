@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 Robert Gieseke. See License.txt.
 -- Lilypond LPeg lexer.
 -- TODO Embed Scheme; Notes?, Numbers?

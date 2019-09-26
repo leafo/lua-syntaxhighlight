@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2016-2019 David B. Lamkins <david@lamkins.net>. See License.txt.
 -- Protocol Buffer IDL LPeg lexer.
 -- <https://developers.google.com/protocol-buffers/>

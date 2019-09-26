@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2016-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- PICO-8 lexer.
 -- http://www.lexaloffle.com/pico-8.php

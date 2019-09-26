@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright (c) 2014-2019 Piotr Orzechowski [drzewo.org]. See License.txt.
 -- Xtend LPeg lexer.
 

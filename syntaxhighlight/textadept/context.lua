@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 Robert Gieseke, Lars Otter. See License.txt.
 -- ConTeXt LPeg lexer.
 

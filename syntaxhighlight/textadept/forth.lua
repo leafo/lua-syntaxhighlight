@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 Mitchell mitchell.att.foicica.com. See License.txt.
 -- Forth LPeg lexer.
 -- Contributions from Joseph Eib.

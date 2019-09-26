@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 Mitchell mitchell.att.foicica.com. See License.txt.
 -- Nim LPeg lexer.
 

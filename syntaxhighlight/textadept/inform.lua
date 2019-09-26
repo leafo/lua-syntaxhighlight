@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2010-2019 Jeff Stone. See License.txt.
 -- Inform LPeg lexer for Scintilla.
 -- JMS 2010-04-25.

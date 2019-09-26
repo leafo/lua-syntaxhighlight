@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 gwash. See License.txt.
 -- Archlinux PKGBUILD LPeg lexer.
 

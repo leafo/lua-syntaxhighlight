@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2015-2019 Jason Schindler. See License.txt.
 -- Fish (http://fishshell.com/) script LPeg lexer.
 

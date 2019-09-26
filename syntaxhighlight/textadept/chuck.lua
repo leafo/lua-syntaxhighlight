@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2010-2019 Martin Morawetz. See License.txt.
 -- ChucK LPeg lexer.
 

@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 Mitchell mitchell.att.foicica.com. See License.txt.
 -- AWK LPeg lexer.
 -- Modified by Wolfgang Seeberg 2012, 2013.

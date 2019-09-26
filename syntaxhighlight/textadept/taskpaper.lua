@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright (c) 2016-2019 Larry Hynes. See License.txt.
 -- Taskpaper LPeg lexer
 

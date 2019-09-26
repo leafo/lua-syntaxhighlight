@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2013-2019 Michael T. Richter. See License.txt.
 -- SNOBOL4 lexer.
 -- This lexer works with classic SNOBOL4 as well as the CSNOBOL4 extensions.

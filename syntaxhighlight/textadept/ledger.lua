@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2015-2019 Charles Lehner. See License.txt.
 -- ledger journal LPeg lexer, see http://www.ledger-cli.org/
 

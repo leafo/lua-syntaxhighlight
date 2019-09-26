@@ -1,3 +1,4 @@
+local lpeg = require('lpeg')
 -- Copyright 2006-2019 Robert Gieseke. See License.txt.
 -- Sass CSS preprocessor LPeg lexer.
 -- http://sass-lang.com
