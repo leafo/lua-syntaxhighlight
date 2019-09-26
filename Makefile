@@ -9,6 +9,7 @@ vendor:
 	mkdir -p syntaxhighlight/textadept
 	cp tmp/textadept_NIGHTLY*/lexers/*.lua syntaxhighlight/textadept
 	sed -i -e "s/require('lexer')/require('syntaxhighlight.textadept.lexer')/" syntaxhighlight/textadept/*.lua
+	sed -i -e "1ilocal lpeg = require('lpeg')" syntaxhighlight/textadept/*.lua
 	cp tmp/textadept_NIGHTLY*/LICENSE syntaxhighlight/textadept
 
 local: build
