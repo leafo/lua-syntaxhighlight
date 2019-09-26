@@ -7,7 +7,7 @@ Highlights code into HTML using lexers from [Textadept](https://foicica.com/text
 ```lua
 local sh = require("syntaxhighlight")
 
-local html = sh.highlight_html("lua", [[
+local html = sh.highlight_to_html("lua", [[
 
 local function hello_world(times)
   for i=1,times do
@@ -35,7 +35,7 @@ Output:
 
 ## Interface
 
-### `highlight_html(language_name, code, opts={})`
+### `highlight_to_html(language_name, code, opts={})`
 
 Highlights code using the lexer for `language_name`. All input code is HTML escaped and is safe to embed directly into a page.
 

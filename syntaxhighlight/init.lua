@@ -107,8 +107,8 @@ merge_adjacent = function(tuples)
   end
   return out
 end
-local highlight_html
-highlight_html = function(language, code, opts)
+local highlight_to_html
+highlight_to_html = function(language, code, opts)
   if opts == nil then
     opts = { }
   end
@@ -156,5 +156,5 @@ highlight_html = function(language, code, opts)
 end
 return {
   lexers = lexers,
-  highlight_html = highlight_html
+  highlight_to_html = highlight_to_html
 }

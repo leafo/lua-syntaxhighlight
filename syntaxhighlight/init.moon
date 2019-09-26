@@ -71,7 +71,7 @@ merge_adjacent = (tuples) ->
   out
 
 
-highlight_html = (language, code, opts={}) ->
+highlight_to_html = (language, code, opts={}) ->
   lex = lexers[language]
 
   class_prefix = opts.class_prefix or "sh_"
@@ -117,7 +117,7 @@ highlight_html = (language, code, opts={}) ->
 
 {
   :lexers
-  :highlight_html
+  :highlight_to_html
 }
 
 

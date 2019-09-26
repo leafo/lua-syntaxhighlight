@@ -2,11 +2,11 @@
 
 describe "syntaxhighlight", ->
   it "highlights moonscript", ->
-    out = require("syntaxhighlight").highlight_html "moonscript", "print 'hello' for i=1,20"
+    out = require("syntaxhighlight").highlight_to_html "moonscript", "print 'hello' for i=1,20"
     assert.same [[<pre class="sh_highlight"><span class="sh_function">print</span> <span class="sh_string">&#x27;hello&#x27;</span> <span class="sh_keyword">for</span> <span class="sh_identifier">i</span><span class="sh_operator">=</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">20</span></pre>]], out
 
   it "highlights html", ->
-    out = require("syntaxhighlight").highlight_html "moonscript", [[
+    out = require("syntaxhighlight").highlight_to_html "moonscript", [[
       <!DOCTYPE HTML>
       <html lang="en">
       <head>
@@ -33,15 +33,15 @@ describe "syntaxhighlight", ->
     </pre>]], out
 
   it "highlights bare: true", ->
-    out = require("syntaxhighlight").highlight_html "lua", [[print('hi')]], bare: true
+    out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], bare: true
     assert.same [[<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_string">&#x27;hi&#x27;</span><span class="sh_operator">)</span>]], out
 
   it "highlights bare: true", ->
-    out = require("syntaxhighlight").highlight_html "lua", [[print('hi')]], bare: true
+    out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], bare: true
     assert.same [[<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_string">&#x27;hi&#x27;</span><span class="sh_operator">)</span>]], out
 
   it "highlights css_prefix: cool-", ->
-    out = require("syntaxhighlight").highlight_html "lua", [[print('hi')]], class_prefix: "cool-"
+    out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], class_prefix: "cool-"
     assert.same [[<pre class="sh_highlight"><span class="cool-function">print</span><span class="cool-operator">(</span><span class="cool-string">&#x27;hi&#x27;</span><span class="cool-operator">)</span></pre>]], out
 
   it "handles invalid lexer", ->
@@ -49,5 +49,5 @@ describe "syntaxhighlight", ->
       nil
       "failed to find lexer for fartlang"
     }, {
-      require("syntaxhighlight").highlight_html "fartlang", "print 'hello'"
+      require("syntaxhighlight").highlight_to_html "fartlang", "print 'hello'"
     }
