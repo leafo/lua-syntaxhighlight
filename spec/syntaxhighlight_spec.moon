@@ -32,6 +32,28 @@ describe "syntaxhighlight", ->
       <span class="sh_operator">&lt;/</span><span class="sh_identifier">html</span><span class="sh_operator">&gt;</span>
     </pre>]], out
 
+  it "highlights html with css", ->
+    out = assert require("syntaxhighlight").highlight_to_html "html", [[
+      <!DOCTYPE HTML>
+      <html lang="en">
+
+      <style type="text/css">
+        body {
+          color: blue;
+        }
+      </style>
+    ]]
+
+    assert.same out, [[<pre class="sh_highlight">      <span class="sh_doctype sh_comment">&lt;!DOCTYPE HTML&gt;</span>
+      <span class="sh_element sh_keyword">&lt;html</span> <span class="sh_attribute sh_type">lang</span><span class="sh_default">=</span><span class="sh_string">&quot;en&quot;</span><span class="sh_element sh_keyword">&gt;</span>
+
+      <span class="sh_element sh_keyword">&lt;style</span> <span class="sh_attribute sh_type">type</span><span class="sh_operator">=</span><span class="sh_string">&quot;text/css&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_css_whitespace sh_whitespace">
+        </span><span class="sh_identifier">body</span><span class="sh_css_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_css_whitespace sh_whitespace">
+          </span><span class="sh_property sh_keyword">color</span><span class="sh_operator">:</span><span class="sh_css_whitespace sh_whitespace"> </span><span class="sh_value sh_constant">blue</span><span class="sh_operator">;</span><span class="sh_css_whitespace sh_whitespace">
+        </span><span class="sh_operator">}</span><span class="sh_css_whitespace sh_whitespace">
+      </span><span class="sh_element sh_keyword">&lt;/style&gt;</span>
+    </pre>]]
+
   it "highlights bare: true", ->
     out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], bare: true
     assert.same [[<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_string">&#x27;hi&#x27;</span><span class="sh_operator">)</span>]], out
