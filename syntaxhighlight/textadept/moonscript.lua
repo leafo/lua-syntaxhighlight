@@ -1,7 +1,7 @@
 -- Copyright 2016-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- Moonscript LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, S, R = lpeg.P, lpeg.S, lpeg.R
 

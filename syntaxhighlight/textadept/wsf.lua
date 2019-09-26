@@ -2,7 +2,7 @@
 -- WSF LPeg lexer (based on XML).
 -- Contributed by Jeff Stone.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S, V = lpeg.P, lpeg.R, lpeg.S, lpeg.V
 

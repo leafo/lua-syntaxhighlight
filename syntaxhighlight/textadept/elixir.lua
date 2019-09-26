@@ -2,7 +2,7 @@
 -- Contributed by Richard Philips.
 -- Elixir LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local B, P, R, S = lpeg.B, lpeg.P, lpeg.R, lpeg.S
 

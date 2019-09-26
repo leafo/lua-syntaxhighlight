@@ -1,7 +1,7 @@
 -- Copyright (c) 2015-2019 Piotr Orzechowski [drzewo.org]. See License.txt.
 -- vCard 2.1, 3.0 and 4.0 LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

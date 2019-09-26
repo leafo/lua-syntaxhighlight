@@ -1,36 +1,34 @@
-local lexer_mod = require("syntaxhighlight.textadept.lexer")
-local parts
-do
-  local _accum_0 = { }
-  local _len_0 = 1
-  for part in lexer_mod.path:gmatch('[^;]+') do
-    _accum_0[_len_0] = part:gsub("%?%.lua", "syntaxhighlight/textadept/?.lua")
-    _len_0 = _len_0 + 1
+local load_lexer
+load_lexer = function()
+  local lexer_mod = require("syntaxhighlight.textadept.lexer")
+  local parts
+  do
+    local _accum_0 = { }
+    local _len_0 = 1
+    for part in lexer_mod.path:gmatch('[^;]+') do
+      _accum_0[_len_0] = part:gsub("%?%.lua", "syntaxhighlight/textadept/?.lua")
+      _len_0 = _len_0 + 1
+    end
+    parts = _accum_0
   end
-  parts = _accum_0
+  lexer_mod.path = table.concat(parts, ";")
+  return lexer_mod
 end
-lexer_mod.path = table.concat(parts, ";")
+local lexer_mod
 local lexers = setmetatable({ }, {
   __index = function(self, name)
-    local prev_mod = package.loaded.lexer
+    if not (lexer_mod) then
+      lexer_mod = load_lexer()
+    end
     local source_path = package.searchpath(name, lexer_mod.path)
     local mod
-    local success
     if source_path then
-      package.loaded.lexer = lexer_mod
       mod = require("syntaxhighlight.textadept." .. tostring(name))
-      package.loaded.lexer = prev_mod
-      success = true
     else
-      success = false
+      mod = false
     end
-    if success then
-      self[name] = mod
-      return self[name]
-    else
-      self[name] = false
-      return false
-    end
+    self[name] = mod
+    return self[name]
   end
 })
 local tag_tokens

@@ -1,7 +1,7 @@
 -- Copyright 2017-2019 Murray Calavera. See License.txt.
 -- Standard ML LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token = lexer.token
 
 function mlword(words)

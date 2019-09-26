@@ -25,7 +25,7 @@ With the use of Scintilla's `SCI_FOLDALL(SC_FOLDACTION_TOGGLE)` or Textadept's
 folding, useful with large documents.
 ]]
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

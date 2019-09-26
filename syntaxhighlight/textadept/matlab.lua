@@ -2,7 +2,7 @@
 -- Matlab LPeg lexer.
 -- Based off of lexer code by Mitchell.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

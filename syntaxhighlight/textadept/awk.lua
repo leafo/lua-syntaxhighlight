@@ -2,7 +2,7 @@
 -- AWK LPeg lexer.
 -- Modified by Wolfgang Seeberg 2012, 2013.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

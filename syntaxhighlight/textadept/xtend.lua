@@ -1,7 +1,7 @@
 -- Copyright (c) 2014-2019 Piotr Orzechowski [drzewo.org]. See License.txt.
 -- Xtend LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

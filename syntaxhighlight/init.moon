@@ -1,35 +1,33 @@
-lexer_mod = require "syntaxhighlight.textadept.lexer"
+load_lexer = ->
+  lexer_mod = require "syntaxhighlight.textadept.lexer"
 
--- setup the path so including sub-grammars looks at right place
-parts = for part in lexer_mod.path\gmatch '[^;]+'
-  part\gsub "%?%.lua", "syntaxhighlight/textadept/?.lua"
+  -- setup the path so including sub-grammars looks at right place
+  parts = for part in lexer_mod.path\gmatch '[^;]+'
+    part\gsub "%?%.lua", "syntaxhighlight/textadept/?.lua"
 
-lexer_mod.path = table.concat parts, ";"
+  lexer_mod.path = table.concat parts, ";"
+
+  lexer_mod
+
+
+local lexer_mod
 
 lexers = setmetatable {}, {
   __index: (name) =>
-    prev_mod = package.loaded.lexer
+    unless lexer_mod
+      lexer_mod = load_lexer!
 
     -- see if the module exists
     -- package.searchpath is defined in lexer.lua for lua 5.1
     source_path = package.searchpath name, lexer_mod.path
 
-    local mod
-
-    success = if source_path
-      package.loaded.lexer = lexer_mod
-      mod = require("syntaxhighlight.textadept.#{name}")
-      package.loaded.lexer = prev_mod
-      true
+    mod = if source_path
+      require("syntaxhighlight.textadept.#{name}")
     else
       false
 
-    if success
-      @[name] = mod
-      @[name]
-    else
-      @[name] = false
-      false
+    @[name] = mod
+    @[name]
 }
 
 tag_tokens = (source, tokens) ->

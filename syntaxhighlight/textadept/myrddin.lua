@@ -1,7 +1,7 @@
 -- Copyright 2017-2019 Michael Forney. See License.txt
 -- Myrddin LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S, V = lpeg.P, lpeg.R, lpeg.S, lpeg.V
 

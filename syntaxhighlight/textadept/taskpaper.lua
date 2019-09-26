@@ -1,7 +1,7 @@
 -- Copyright (c) 2016-2019 Larry Hynes. See License.txt.
 -- Taskpaper LPeg lexer
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token = lexer.token
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

@@ -2,4 +2,4 @@
 -- Container LPeg lexer.
 -- This is SciTE's plain text lexer.
 
-return require('lexer').new('container')
+return require('syntaxhighlight.textadept.lexer').new('container')

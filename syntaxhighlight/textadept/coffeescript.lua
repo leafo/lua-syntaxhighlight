@@ -1,7 +1,7 @@
 -- Copyright 2006-2019 Mitchell mitchell.att.foicica.com. See License.txt.
 -- CoffeeScript LPeg lexer.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, S = lpeg.P, lpeg.S
 

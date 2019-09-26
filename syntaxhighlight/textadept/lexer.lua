@@ -68,7 +68,7 @@ local M = {}
 --
 --     -- ? LPeg lexer.
 --
---     local lexer = require('lexer')
+--     local lexer = require('syntaxhighlight.textadept.lexer')
 --     local token, word_match = lexer.token, lexer.word_match
 --     local P, R, S = lpeg.P, lpeg.R, lpeg.S
 --
@@ -607,7 +607,7 @@ local M = {}
 --
 -- Legacy lexers are of the form:
 --
---     local l = require('lexer')
+--     local l = require('syntaxhighlight.textadept.lexer')
 --     local token, word_match = l.token, l.word_match
 --     local P, R, S = lpeg.P, lpeg.R, lpeg.S
 --
@@ -664,7 +664,7 @@ local M = {}
 --
 -- As an example, consider the following sample legacy lexer:
 --
---     local l = require('lexer')
+--     local l = require('syntaxhighlight.textadept.lexer')
 --     local token, word_match = l.token, l.word_match
 --     local P, R, S = lpeg.P, lpeg.R, lpeg.S
 --
@@ -703,7 +703,7 @@ local M = {}
 --
 -- Following the migration steps would yield:
 --
---     local lexer = require('lexer')
+--     local lexer = require('syntaxhighlight.textadept.lexer')
 --     local token, word_match = lexer.token, lexer.word_match
 --     local P, R, S = lpeg.P, lpeg.R, lpeg.S
 --

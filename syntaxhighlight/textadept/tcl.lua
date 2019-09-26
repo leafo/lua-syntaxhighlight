@@ -3,7 +3,7 @@
 -- This lexer follows the TCL dodekalogue (http://wiki.tcl.tk/10259).
 -- It is based on the previous lexer by Mitchell.
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

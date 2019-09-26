@@ -2,7 +2,7 @@
 -- Sass CSS preprocessor LPeg lexer.
 -- http://sass-lang.com
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token = lexer.token
 local P, S = lpeg.P, lpeg.S
 

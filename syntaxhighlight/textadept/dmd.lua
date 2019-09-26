@@ -2,7 +2,7 @@
 -- D LPeg lexer.
 -- Heavily modified by Brian Schott (@Hackerpilot on Github).
 
-local lexer = require('lexer')
+local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 

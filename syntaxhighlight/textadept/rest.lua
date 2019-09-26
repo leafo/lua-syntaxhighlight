@@ -1,7 +1,7 @@
 -- Copyright 2006-2019 Mitchell mitchell.att.foicica.com. See License.txt.
 -- reStructuredText LPeg lexer.
 
-local l = require('lexer')
+local l = require('syntaxhighlight.textadept.lexer')
 local token, word_match, starts_line = l.token, l.word_match, l.starts_line
 local P, R, S = lpeg.P, lpeg.R, lpeg.S
 
