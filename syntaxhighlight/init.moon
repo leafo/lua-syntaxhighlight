@@ -1,3 +1,6 @@
+
+unpack = unpack or table.unpack
+
 load_lexer = ->
   lexer_mod = require "syntaxhighlight.textadept.lexer"
 

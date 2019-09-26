@@ -1,3 +1,4 @@
+local unpack = unpack or table.unpack
 local load_lexer
 load_lexer = function()
   local lexer_mod = require("syntaxhighlight.textadept.lexer")
