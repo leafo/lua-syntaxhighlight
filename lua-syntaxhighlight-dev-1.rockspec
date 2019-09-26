@@ -91,6 +91,7 @@ build = {
     ["syntaxhighlight.textadept.moonscript"] = "syntaxhighlight/textadept/moonscript.lua",
     ["syntaxhighlight.textadept.myrddin"] = "syntaxhighlight/textadept/myrddin.lua",
     ["syntaxhighlight.textadept.nemerle"] = "syntaxhighlight/textadept/nemerle.lua",
+    ["syntaxhighlight.textadept.nginx"] = "syntaxhighlight/textadept/nginx.lua",
     ["syntaxhighlight.textadept.nim"] = "syntaxhighlight/textadept/nim.lua",
     ["syntaxhighlight.textadept.nsis"] = "syntaxhighlight/textadept/nsis.lua",
     ["syntaxhighlight.textadept.null"] = "syntaxhighlight/textadept/null.lua",
