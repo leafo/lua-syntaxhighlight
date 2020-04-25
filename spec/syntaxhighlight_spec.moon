@@ -64,7 +64,7 @@ describe "syntaxhighlight", ->
 
   it "highlights css_prefix: cool-", ->
     out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], class_prefix: "cool-"
-    assert.same [[<pre class="sh_highlight"><span class="cool-function">print</span><span class="cool-operator">(</span><span class="cool-string">&#x27;hi&#x27;</span><span class="cool-operator">)</span></pre>]], out
+    assert.same [[<pre class="cool-highlight"><span class="cool-function">print</span><span class="cool-operator">(</span><span class="cool-string">&#x27;hi&#x27;</span><span class="cool-operator">)</span></pre>]], out
 
   it "handles invalid lexer", ->
     assert.same {

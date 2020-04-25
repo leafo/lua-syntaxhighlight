@@ -131,7 +131,9 @@ highlight_to_html = (language, code, opts={}) ->
   buffer = {}
 
   unless opts.bare
-    table.insert buffer, '<pre class="sh_highlight">'
+    table.insert buffer, '<pre class="'
+    table.insert buffer, escape_text\match class_prefix
+    table.insert buffer, 'highlight">'
 
   for {chunk_type, chunk} in *tagged_tokens
     if chunk_type == "whitespace"

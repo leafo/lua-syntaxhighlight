@@ -180,7 +180,9 @@ highlight_to_html = function(language, code, opts)
   escape_text = require("web_sanitize.html").escape_text
   local buffer = { }
   if not (opts.bare) then
-    table.insert(buffer, '<pre class="sh_highlight">')
+    table.insert(buffer, '<pre class="')
+    table.insert(buffer, escape_text:match(class_prefix))
+    table.insert(buffer, 'highlight">')
   end
   for _index_0 = 1, #tagged_tokens do
     local _des_0 = tagged_tokens[_index_0]
