@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: leafo/gh-actions-lua@v2
+    - uses: leafo/gh-actions-lua@v5
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
