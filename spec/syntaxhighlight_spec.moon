@@ -54,6 +54,18 @@ describe "syntaxhighlight", ->
       </span><span class="sh_element sh_keyword">&lt;/style&gt;</span>
     </pre>]]
 
+  it "highlights yaml", ->
+    out = assert require("syntaxhighlight").highlight_to_html "yaml", [[
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+]]
+
+
   it "highlights bare: true", ->
     out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], bare: true
     assert.same [[<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_string">&#x27;hi&#x27;</span><span class="sh_operator">)</span>]], out

@@ -50,7 +50,9 @@ lexers = setmetatable {}, {
     source_path = searchpath name, lexer_search_path
 
     mod = if source_path
-      require("syntaxhighlight.textadept.#{name}")
+      -- we use the custom require function provided by lexer to allow loading
+      -- legacy lexers
+      lexer_mod.load name
     else
       false
 

@@ -64,7 +64,7 @@ local lexers = setmetatable({ }, {
     local source_path = searchpath(name, lexer_search_path)
     local mod
     if source_path then
-      mod = require("syntaxhighlight.textadept." .. tostring(name))
+      mod = lexer_mod.load(name)
     else
       mod = false
     end
