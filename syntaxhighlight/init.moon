@@ -1,28 +1,53 @@
 
 unpack = unpack or table.unpack
 
-load_lexer = ->
-  lexer_mod = require "syntaxhighlight.textadept.lexer"
+lexer_search_path = do
+  parts = for part in package.path\gmatch '[^;]+'
+    -- no lexers use the init syntax
+    unless part\match "%?%.lua$"
+      continue
 
-  -- setup the path so including sub-grammars looks at right place
-  parts = for part in lexer_mod.path\gmatch '[^;]+'
     part\gsub "%?%.lua", "syntaxhighlight/textadept/?.lua"
 
-  lexer_mod.path = table.concat parts, ";"
+  table.concat parts, ";"
 
-  lexer_mod
+-- this is adapted from the lexer module
+searchpath = (name, path) ->
+  tried = {}
+  for part in path\gmatch "[^;]+"
+    filename = part\gsub "%?", name
 
+    if loadfile filename
+      return filename
+
+    tried[#tried + 1] = string.format "no file '%s'", filename
+
+  nil, table.concat tried, "\n"
 
 local lexer_mod
+
+load_lexer = ->
+  return if lexer_mod
+  lexer_mod = require "syntaxhighlight.textadept.lexer"
+
+  -- initialize the package path like lexer would do, but using our custom path
+  lexer_mod.property = {
+    "lexer.lpeg.home": lexer_search_path\gsub "/%?%.lua", ""
+  }
+
+  lexer_mod.property_int = setmetatable {}, {
+    __index: (k) => tonumber(lexer_mod.property[k]) or 0
+    __newindex: => error "read-only property"
+  }
 
 lexers = setmetatable {}, {
   __index: (name) =>
     unless lexer_mod
-      lexer_mod = load_lexer!
+      load_lexer!
 
     -- see if the module exists
     -- package.searchpath is defined in lexer.lua for lua 5.1
-    source_path = package.searchpath name, lexer_mod.path
+    source_path = searchpath name, lexer_search_path
 
     mod = if source_path
       require("syntaxhighlight.textadept.#{name}")

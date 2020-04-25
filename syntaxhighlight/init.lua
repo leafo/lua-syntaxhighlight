@@ -1,27 +1,67 @@
 local unpack = unpack or table.unpack
-local load_lexer
-load_lexer = function()
-  local lexer_mod = require("syntaxhighlight.textadept.lexer")
+local lexer_search_path
+do
   local parts
   do
     local _accum_0 = { }
     local _len_0 = 1
-    for part in lexer_mod.path:gmatch('[^;]+') do
-      _accum_0[_len_0] = part:gsub("%?%.lua", "syntaxhighlight/textadept/?.lua")
-      _len_0 = _len_0 + 1
+    for part in package.path:gmatch('[^;]+') do
+      local _continue_0 = false
+      repeat
+        if not (part:match("%?%.lua$")) then
+          _continue_0 = true
+          break
+        end
+        local _value_0 = part:gsub("%?%.lua", "syntaxhighlight/textadept/?.lua")
+        _accum_0[_len_0] = _value_0
+        _len_0 = _len_0 + 1
+        _continue_0 = true
+      until true
+      if not _continue_0 then
+        break
+      end
     end
     parts = _accum_0
   end
-  lexer_mod.path = table.concat(parts, ";")
-  return lexer_mod
+  lexer_search_path = table.concat(parts, ";")
+end
+local searchpath
+searchpath = function(name, path)
+  local tried = { }
+  for part in path:gmatch("[^;]+") do
+    local filename = part:gsub("%?", name)
+    if loadfile(filename) then
+      return filename
+    end
+    tried[#tried + 1] = string.format("no file '%s'", filename)
+  end
+  return nil, table.concat(tried, "\n")
 end
 local lexer_mod
+local load_lexer
+load_lexer = function()
+  if lexer_mod then
+    return 
+  end
+  lexer_mod = require("syntaxhighlight.textadept.lexer")
+  lexer_mod.property = {
+    ["lexer.lpeg.home"] = lexer_search_path:gsub("/%?%.lua", "")
+  }
+  lexer_mod.property_int = setmetatable({ }, {
+    __index = function(self, k)
+      return tonumber(lexer_mod.property[k]) or 0
+    end,
+    __newindex = function(self)
+      return error("read-only property")
+    end
+  })
+end
 local lexers = setmetatable({ }, {
   __index = function(self, name)
     if not (lexer_mod) then
-      lexer_mod = load_lexer()
+      load_lexer()
     end
-    local source_path = package.searchpath(name, lexer_mod.path)
+    local source_path = searchpath(name, lexer_search_path)
     local mod
     if source_path then
       mod = require("syntaxhighlight.textadept." .. tostring(name))
