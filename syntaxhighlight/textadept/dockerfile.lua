@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2016-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
+-- Copyright 2016-2020 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- Dockerfile LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

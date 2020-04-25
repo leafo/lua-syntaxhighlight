@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2019 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
 -- R LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

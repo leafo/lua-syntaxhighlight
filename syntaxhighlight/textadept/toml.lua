@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2015-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
+-- Copyright 2015-2020 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- TOML LPeg lexer.
 
 local lexer = require("lexer")

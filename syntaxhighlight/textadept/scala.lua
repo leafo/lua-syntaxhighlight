@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2019 JMS. See License.txt.
+-- Copyright 2006-2020 JMS. See License.txt.
 -- Scala LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

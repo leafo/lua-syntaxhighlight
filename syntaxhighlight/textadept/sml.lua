@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2017-2019 Murray Calavera. See License.txt.
+-- Copyright 2017-2020 Murray Calavera. See License.txt.
 -- Standard ML LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

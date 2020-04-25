@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2019 Martin Morawetz. See License.txt.
+-- Copyright 2006-2020 Martin Morawetz. See License.txt.
 -- Matlab LPeg lexer.
 -- Based off of lexer code by Mitchell.
 

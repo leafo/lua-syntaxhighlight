@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2015-2019 Jason Schindler. See License.txt.
+-- Copyright 2015-2020 Jason Schindler. See License.txt.
 -- Gherkin (https://github.com/cucumber/cucumber/wiki/Gherkin) LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

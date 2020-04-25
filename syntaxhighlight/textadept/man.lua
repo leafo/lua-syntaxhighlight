@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2015-2019 David B. Lamkins <david@lamkins.net>. See License.txt.
+-- Copyright 2015-2020 David B. Lamkins <david@lamkins.net>. See License.txt.
 -- man/roff LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2019 Robert Gieseke, Lars Otter. See License.txt.
+-- Copyright 2006-2020 Robert Gieseke, Lars Otter. See License.txt.
 -- ConTeXt LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')

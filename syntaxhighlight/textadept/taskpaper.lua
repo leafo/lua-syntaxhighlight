@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright (c) 2016-2019 Larry Hynes. See License.txt.
+-- Copyright (c) 2016-2020 Larry Hynes. See License.txt.
 -- Taskpaper LPeg lexer
 
 local lexer = require('syntaxhighlight.textadept.lexer')
