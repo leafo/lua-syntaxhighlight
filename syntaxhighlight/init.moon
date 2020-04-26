@@ -2,12 +2,18 @@
 unpack = unpack or table.unpack
 
 lexer_search_path = do
-  parts = for part in package.path\gmatch '[^;]+'
+  parts = {}
+
+  for part in package.path\gmatch '[^;]+'
     -- no lexers use the init syntax
     unless part\match "%?%.lua$"
       continue
 
-    part\gsub "%?%.lua", "syntaxhighlight/textadept/?.lua"
+    -- 1st priority, lexers provided by this library
+    table.insert parts, (part\gsub "%?%.lua", "syntaxhighlight/lexers/?.lua")
+
+    -- 2nd priority, lexers vendored from text adept
+    table.insert parts, (part\gsub "%?%.lua", "syntaxhighlight/textadept/?.lua")
 
   table.concat parts, ";"
 

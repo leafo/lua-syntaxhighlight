@@ -1,27 +1,21 @@
 local unpack = unpack or table.unpack
 local lexer_search_path
 do
-  local parts
-  do
-    local _accum_0 = { }
-    local _len_0 = 1
-    for part in package.path:gmatch('[^;]+') do
-      local _continue_0 = false
-      repeat
-        if not (part:match("%?%.lua$")) then
-          _continue_0 = true
-          break
-        end
-        local _value_0 = part:gsub("%?%.lua", "syntaxhighlight/textadept/?.lua")
-        _accum_0[_len_0] = _value_0
-        _len_0 = _len_0 + 1
+  local parts = { }
+  for part in package.path:gmatch('[^;]+') do
+    local _continue_0 = false
+    repeat
+      if not (part:match("%?%.lua$")) then
         _continue_0 = true
-      until true
-      if not _continue_0 then
         break
       end
+      table.insert(parts, (part:gsub("%?%.lua", "syntaxhighlight/lexers/?.lua")))
+      table.insert(parts, (part:gsub("%?%.lua", "syntaxhighlight/textadept/?.lua")))
+      _continue_0 = true
+    until true
+    if not _continue_0 then
+      break
     end
-    parts = _accum_0
   end
   lexer_search_path = table.concat(parts, ";")
 end
