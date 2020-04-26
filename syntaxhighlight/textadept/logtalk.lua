@@ -66,6 +66,6 @@ local operators = [[
   as
 ]]
 lex:modify_rule('operator', token(lexer.OPERATOR, word_match(operators)) +
-                            lex:get_rule('operator'))
+  lex:get_rule('operator'))
 
 return lex

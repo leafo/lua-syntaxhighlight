@@ -1,39 +1,40 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
--- Lua LPeg lexer.
--- Original written by Peter Odding, 2007/04/04.
+-- Copyright 2016-2020 Alejandro Baez (https://keybase.io/baez). See License.txt.
+-- Moonscript LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S, R = lpeg.P, lpeg.S, lpeg.R
 
-local lex = lexer.new('lua')
+local lex = lexer.new('moonscript', {fold_by_indentation = true})
 
 -- Whitespace.
-lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
+lex:add_rule('whitspace', token(lexer.WHITESPACE, lexer.space^1))
 
 -- Keywords.
 lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  and break do else elseif end false for function if in local nil not or repeat
-  return then true until while
-  -- Added in 5.2.
-  goto
+  -- Lua.
+  and break do else elseif false for if in local nil not or return then true
+  while
+  -- Moonscript.
+  continue class export extends from import super switch unless using when with
 ]]))
 
--- Functions and deprecated functions.
-local func = token(lexer.FUNCTION, word_match[[
+-- Error words.
+lex:add_rule('error', token(lexer.ERROR, word_match[[function end]]))
+
+-- Self reference.
+lex:add_rule('self_ref', token('self_ref', '@' * lexer.word + 'self'))
+lex:add_style('self_ref', lexer.STYLE_LABEL)
+
+-- Functions.
+lex:add_rule('function', token(lexer.FUNCTION, word_match[[
   assert collectgarbage dofile error getmetatable ipairs load loadfile next
   pairs pcall print rawequal rawget rawset require select setmetatable tonumber
   tostring type xpcall
   -- Added in 5.2.
   rawlen
-]])
-local deprecated_func = token('deprecated_function', word_match[[
-  -- Deprecated in 5.2.
-  getfenv loadstring module setfenv unpack
-]])
-lex:add_rule('function', func + deprecated_func)
-lex:add_style('deprecated_function', lexer.STYLE_FUNCTION .. ',italics')
+]]))
 
 -- Constants.
 lex:add_rule('constant', token(lexer.CONSTANT, word_match[[
@@ -42,8 +43,8 @@ lex:add_rule('constant', token(lexer.CONSTANT, word_match[[
   _ENV
 ]]))
 
--- Libraries and deprecated libraries.
-local library = token('library', word_match[[
+-- Libraries.
+lex:add_rule('library', token('library', word_match[[
   -- Coroutine.
   coroutine coroutine.create coroutine.resume coroutine.running coroutine.status
   coroutine.wrap coroutine.yield
@@ -86,28 +87,28 @@ local library = token('library', word_match[[
   debug.setlocal debug.setmetatable debug.setupvalue debug.traceback
   -- Debug added in 5.2.
   debug.getuservalue debug.setuservalue debug.upvalueid debug.upvaluejoin
-]])
-local deprecated_library = token('deprecated_library', word_match[[
-  -- Module deprecated in 5.2.
-  package.loaders package.seeall
-  -- Table deprecated in 5.2.
-  table.maxn
-  -- Math deprecated in 5.2.
-  math.log10
-  -- Math deprecated in 5.3.
-  math.atan2 math.cosh math.frexp math.ldexp math.pow math.sinh math.tanh
-  -- Bit32 deprecated in 5.3.
-  bit32 bit32.arshift bit32.band bit32.bnot bit32.bor bit32.btest bit32.extract
-  bit32.lrotate bit32.lshift bit32.replace bit32.rrotate bit32.rshift bit32.xor
-  -- Debug deprecated in 5.2.
-  debug.getfenv debug.setfenv
-]])
-lex:add_rule('library', library + deprecated_library)
+
+  --- MoonScript 0.3.1 standard library.
+  -- Printing functions.
+  p
+  -- Table functions.
+  run_with_scope defaultbl extend copy
+  -- Class/object functions.
+  is_object bind_methods mixin mixin_object mixin_table
+  -- Misc functions.
+  fold
+  -- Debug functions.
+  debug.upvalue
+]]))
 lex:add_style('library', lexer.STYLE_TYPE)
-lex:add_style('deprecated_library', lexer.STYLE_TYPE .. ',italics')
 
 -- Identifiers.
-lex:add_rule('identifier', token(lexer.IDENTIFIER, lexer.word))
+local identifier = token(lexer.IDENTIFIER, lexer.word)
+local proper_ident = token('proper_ident', R('AZ') * lexer.word)
+local tbl_key = token('tbl_key', lexer.word * ':' + ':' * lexer.word )
+lex:add_rule('identifier', tbl_key + proper_ident + identifier)
+lex:add_style('proper_ident', lexer.STYLE_CLASS)
+lex:add_style('tbl_key', lexer.STYLE_REGEX)
 
 local longstring = lpeg.Cmt('[' * lpeg.C(P('=')^0) * '[',
   function(input, index, eq)
@@ -116,8 +117,8 @@ local longstring = lpeg.Cmt('[' * lpeg.C(P('=')^0) * '[',
   end)
 
 -- Strings.
-local sq_str = lexer.range("'")
-local dq_str = lexer.range('"')
+local sq_str = lexer.range("'", false, false)
+local dq_str = lexer.range('"', false, false)
 lex:add_rule('string', token(lexer.STRING, sq_str + dq_str) +
   token('longstring', longstring))
 lex:add_style('longstring', lexer.STYLE_STRING)
@@ -128,35 +129,15 @@ local block_comment = '--' * longstring
 lex:add_rule('comment', token(lexer.COMMENT, block_comment + line_comment))
 
 -- Numbers.
-local lua_integer = P('-')^-1 * (lexer.hex_num + lexer.dec_num)
-lex:add_rule('number', token(lexer.NUMBER, lexer.float + lua_integer))
+lex:add_rule('number', token(lexer.NUMBER, lexer.number))
 
--- Labels.
-lex:add_rule('label', token(lexer.LABEL, '::' * lexer.word * '::'))
+-- Function definition.
+lex:add_rule('fndef', token('fndef', P('->') + '=>'))
+lex:add_style('fndef', lexer.STYLE_PREPROCESSOR)
 
 -- Operators.
-lex:add_rule('operator', token(lexer.OPERATOR, '..' +
-  S('+-*/%^#=<>&|~;:,.{}[]()')))
-
--- Fold points.
-local function fold_longcomment(text, pos, line, s, symbol)
-  if symbol == '[' then
-    if line:find('^%[=*%[', s) then return 1 end
-  elseif symbol == ']' then
-    if line:find('^%]=*%]', s) then return -1 end
-  end
-  return 0
-end
-lex:add_fold_point(lexer.KEYWORD, 'if', 'end')
-lex:add_fold_point(lexer.KEYWORD, 'do', 'end')
-lex:add_fold_point(lexer.KEYWORD, 'function', 'end')
-lex:add_fold_point(lexer.KEYWORD, 'repeat', 'until')
-lex:add_fold_point(lexer.COMMENT, '[', fold_longcomment)
-lex:add_fold_point(lexer.COMMENT, ']', fold_longcomment)
-lex:add_fold_point(lexer.COMMENT, '--', lexer.fold_line_comments('--'))
-lex:add_fold_point('longstring', '[', ']')
-lex:add_fold_point(lexer.OPERATOR, '(', ')')
-lex:add_fold_point(lexer.OPERATOR, '[', ']')
-lex:add_fold_point(lexer.OPERATOR, '{', '}')
+lex:add_rule('operator', token(lexer.OPERATOR, S('+-*!\\/%^#=<>;:,.')))
+lex:add_rule('symbol', token('symbol', S('(){}[]')))
+lex:add_style('symbol', lexer.STYLE_EMBEDDED)
 
 return lex
