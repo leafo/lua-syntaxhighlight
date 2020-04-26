@@ -6,6 +6,8 @@ local P, S, R = lpeg.P, lpeg.S, lpeg.R
 
 local lex = lexer.new('nginx')
 
+lex:add_rule('comment', token(lexer.COMMENT, lexer.to_eol('#')))
+
 start_of_block = lexer.space^0 * P"{"
 end_of_line = lexer.space^0 * P";"
 
@@ -74,7 +76,7 @@ lex:add_rule('function', token(lexer.FUNCTION, word_match[[
 ]]))
 
 
-lex:add_rule('library_arg', token('library', word_match[[
+lex:add_rule('library_arg', token(lexer.FUNCTION, word_match[[
   alias
   include
   pid
@@ -82,7 +84,7 @@ lex:add_rule('library_arg', token('library', word_match[[
 
 
 -- Libraries and deprecated libraries.
-lex:add_rule('library', token('library', word_match[[
+lex:add_rule('library', token(lexer.FUNCTION, word_match[[
   worker_connections
   listen
   default_type
@@ -92,11 +94,30 @@ lex:add_rule('library', token('library', word_match[[
   worker_processes
   error_log
   daemon
+  deny allow
+  server_name
+  access_log
+  gzip
+  gzip_proxied
+  add_header
+  ssi
+  root
+  try_files
+
+  proxy_set_header
+  proxy_pass
+  proxy_cache_path
+  proxy_cache
+  proxy_cache_valid
+  proxy_cache_use_stale
+  proxy_cache_lock
+  proxy_cache_bypass
 ]]))
 
 lex:add_style('library', lexer.STYLE_TYPE)
 
 lex:add_rule('variable', token(lexer.VARIABLE, '$' * (1 - lexer.space)^1))
+lex:add_style('variable', lexer.STYLE_LABEL)
 
 local sq_str = lexer.range("'")
 local dq_str = lexer.range('"')
