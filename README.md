@@ -1,7 +1,9 @@
 
 # syntaxhighlight
 
-Highlights code into HTML using lexers from [Textadept](https://foicica.com/textadept/)
+![test](https://github.com/leafo/lua-syntaxhighlight/workflows/test/badge.svg)
+
+Highlights code into HTML using lexers from [Textadept](https://foicica.com/textadept/).
 
 
 ```lua
@@ -43,7 +45,6 @@ Options:
 
 * `class_prefix` -- default `sh_`: Prefix put in front of every class name generated for each element
 * `bare` -- default `false`: Set to `true` to not return the code wrapped in a `pre` tag
-
 
 
 ## License
@@ -97,16 +98,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-
-
-
-
-
-
-
-
-
-
-
 
