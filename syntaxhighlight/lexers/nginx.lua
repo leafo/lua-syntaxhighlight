@@ -98,8 +98,8 @@ lex:add_style('library', lexer.STYLE_TYPE)
 
 lex:add_rule('variable', token(lexer.VARIABLE, '$' * (1 - lexer.space)^1))
 
-local sq_str = lexer.delimited_range("'", false, true)
-local dq_str = lexer.delimited_range('"', false, true)
+local sq_str = lexer.range("'")
+local dq_str = lexer.range('"')
 lex:add_rule('string', token(lexer.STRING, sq_str + dq_str))
 
 lex:add_rule('number', token(lexer.NUMBER, lexer.float + lexer.integer))

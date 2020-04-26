@@ -31,6 +31,10 @@ describe "syntaxhighlight", ->
       </span><span class="sh_operator">&lt;/</span><span class="sh_identifier">html</span><span class="sh_operator">&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span></pre>]], out
 
+  it "highlights moonscript with custom changes", ->
+    out = assert require("syntaxhighlight").highlight_to_html "moonscript", [[{for: @}]]
+    assert.same [[<pre class="sh_highlight"><span class="sh_symbol sh_embedded">{</span><span class="sh_tbl_key sh_regex">for:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@</span><span class="sh_symbol sh_embedded">}</span></pre>]], out
+
   it "highlights html with css", ->
     out = assert require("syntaxhighlight").highlight_to_html "html", [[
       <!DOCTYPE HTML>

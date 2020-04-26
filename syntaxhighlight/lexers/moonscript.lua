@@ -120,8 +120,8 @@ local longstring = lpeg.Cmt('[' * lpeg.C(P('=')^0) * '[',
   end)
 
 -- Strings.
-local sq_str = lexer.range("'", false, false)
-local dq_str = lexer.range('"', false, false)
+local sq_str = lexer.range("'")
+local dq_str = lexer.range('"')
 lex:add_rule('string', token(lexer.STRING, sq_str + dq_str) +
   token('longstring', longstring))
 lex:add_style('longstring', lexer.STYLE_STRING)
