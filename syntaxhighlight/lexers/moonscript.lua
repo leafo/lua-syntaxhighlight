@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2016-2019 Alejandro Baez (https://keybase.io/baez). See License.txt.
+-- Copyright 2016-2020 Alejandro Baez (https://keybase.io/baez). See License.txt.
 -- Moonscript LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
@@ -114,24 +114,25 @@ lex:add_rule('identifier', proper_ident + identifier)
 lex:add_style('proper_ident', lexer.STYLE_CLASS)
 
 local longstring = lpeg.Cmt('[' * lpeg.C(P('=')^0) * '[',
-                            function(input, index, eq)
-                              local _, e = input:find(']'..eq..']', index, true)
-                              return (e or #input) + 1
-                            end)
+  function(input, index, eq)
+    local _, e = input:find(']' .. eq .. ']', index, true)
+    return (e or #input) + 1
+  end)
 
 -- Strings.
-local sq_str = lexer.delimited_range("'", false, true)
-local dq_str = lexer.delimited_range('"', false, true)
+local sq_str = lexer.range("'", false, false)
+local dq_str = lexer.range('"', false, false)
 lex:add_rule('string', token(lexer.STRING, sq_str + dq_str) +
-                       token('longstring', longstring))
+  token('longstring', longstring))
 lex:add_style('longstring', lexer.STYLE_STRING)
 
 -- Comments.
-lex:add_rule('comment', token(lexer.COMMENT, '--' * (longstring +
-                                                     lexer.nonnewline^0)))
+local line_comment = lexer.to_eol('--')
+local block_comment = '--' * longstring
+lex:add_rule('comment', token(lexer.COMMENT, block_comment + line_comment))
 
 -- Numbers.
-lex:add_rule('number', token(lexer.NUMBER, lexer.float + lexer.integer))
+lex:add_rule('number', token(lexer.NUMBER, lexer.number))
 
 -- Function definition.
 lex:add_rule('fndef', token('fndef', P('->') + '=>'))
