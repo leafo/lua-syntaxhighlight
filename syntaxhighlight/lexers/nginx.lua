@@ -6,12 +6,16 @@ local P, S, R = lpeg.P, lpeg.S, lpeg.R
 
 local lex = lexer.new('nginx')
 
+local named_location = token("named_location", P"@" * lexer.word)
+lex:add_rule("named_location", named_location)
+lex:add_style("named_location", lexer.STYLE_PREPROCESSOR)
+
 lex:add_rule('comment', token(lexer.COMMENT, lexer.to_eol('#')))
 
 start_of_block = lexer.space^0 * P"{"
 end_of_line = lexer.space^0 * P";"
 
-lex:add_rule('location', token(lexer.KEYWORD, "location") * lexer.space^1 * token(lexer.STRING, (1 - start_of_block)^1))
+lex:add_rule('location', token(lexer.KEYWORD, "location") * lexer.space^1 * (named_location + token(lexer.STRING, (1 - start_of_block)^1)))
 
 -- Keywords.
 lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
@@ -103,6 +107,7 @@ lex:add_rule('library', token(lexer.FUNCTION, word_match[[
   ssi
   root
   try_files
+  set_md5
 
   proxy_set_header
   proxy_pass
