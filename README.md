@@ -48,9 +48,9 @@ Options:
 
 ## License
 
-### Files located in `syntaxhighligh/textadept/`
+### Files located in `syntaxhighlight/textadept/`
 
-*See respective authors on top of each file**
+*See respective authors on top of each file*
 
 The MIT License
 
