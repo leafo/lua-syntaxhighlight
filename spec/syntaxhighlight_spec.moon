@@ -81,6 +81,10 @@ jobs:
     out = require("syntaxhighlight").highlight_to_html "nginx", [[location /home { return 404; }]], bare: true
     assert.same [[<span class="sh_keyword">location</span><span class="sh_string"> /home</span><span class="sh_default"> { return </span><span class="sh_number">404</span><span class="sh_default">; }</span>]], out
 
+  it "highlights vim", ->
+    out = require("syntaxhighlight").highlight_to_html "nginx", [["hello"]], bare: true
+    assert.same [[<span class="sh_string">&quot;hello&quot;</span>]], out
+
   it "highlights bare: true", ->
     out = require("syntaxhighlight").highlight_to_html "lua", [[print('hi')]], bare: true
     assert.same [[<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_string">&#x27;hi&#x27;</span><span class="sh_operator">)</span>]], out
