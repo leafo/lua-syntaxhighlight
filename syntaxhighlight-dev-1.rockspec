@@ -1,4 +1,4 @@
-package = "lua-syntaxhighlight"
+package = "syntaxhighlight"
 version = "dev-1"
 source = {
   url = "git://github.com/leafo/lua-syntaxhighlight.git"
