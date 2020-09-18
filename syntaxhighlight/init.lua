@@ -205,5 +205,6 @@ highlight_to_html = function(language, code, opts)
 end
 return {
   lexers = lexers,
-  highlight_to_html = highlight_to_html
+  highlight_to_html = highlight_to_html,
+  VERSION = "1.0.0"
 }

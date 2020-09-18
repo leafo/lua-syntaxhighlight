@@ -167,6 +167,7 @@ highlight_to_html = (language, code, opts={}) ->
 {
   :lexers
   :highlight_to_html
+  VERSION: "1.0.0"
 }
 
 
