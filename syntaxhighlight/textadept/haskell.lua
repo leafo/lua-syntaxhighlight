@@ -1,11 +1,11 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- Haskell LPeg lexer.
 -- Modified by Alex Suraci.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('haskell', {fold_by_indentation = true})
 
@@ -13,17 +13,16 @@ local lex = lexer.new('haskell', {fold_by_indentation = true})
 lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  case class data default deriving do else if import in infix infixl infixr
-  instance let module newtype of then type where _ as qualified hiding
-]]))
-
-local word = (lexer.alnum + S("._'#"))^0
-local op = lexer.punct - S('()[]{}')
+lex:add_rule('keyword', token(lexer.KEYWORD, word_match{
+  'case', 'class', 'data', 'default', 'deriving', 'do', 'else', 'if', 'import', 'in', 'infix',
+  'infixl', 'infixr', 'instance', 'let', 'module', 'newtype', 'of', 'then', 'type', 'where', '_',
+  'as', 'qualified', 'hiding'
+}))
 
 -- Types & type constructors.
-lex:add_rule('type', token(lexer.TYPE, (lexer.upper * word) +
-  (":" * (op^1 - ":"))))
+local word = (lexer.alnum + S("._'#"))^0
+local op = lexer.punct - S('()[]{}')
+lex:add_rule('type', token(lexer.TYPE, (lexer.upper * word) + (':' * (op^1 - ':'))))
 
 -- Identifiers.
 lex:add_rule('identifier', token(lexer.IDENTIFIER, (lexer.alpha + '_') * word))

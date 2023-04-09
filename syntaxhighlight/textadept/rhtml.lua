@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- RHTML LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('rhtml', {inherit = lexer.load('html')})
 
@@ -13,7 +13,7 @@ local ruby = lexer.load('rails')
 local ruby_start_rule = token('rhtml_tag', '<%' * P('=')^-1)
 local ruby_end_rule = token('rhtml_tag', '%>')
 lex:embed(ruby, ruby_start_rule, ruby_end_rule)
-lex:add_style('rhtml_tag', lexer.STYLE_EMBEDDED)
+lex:add_style('rhtml_tag', lexer.styles.embedded)
 
 -- Fold points.
 lex:add_fold_point('rhtml_tag', '<%', '%>')

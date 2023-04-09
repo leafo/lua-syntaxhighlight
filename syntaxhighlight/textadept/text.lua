@@ -1,5 +1,11 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- Text LPeg lexer.
 
-return require('syntaxhighlight.textadept.lexer').new('text')
+local lexer = require('syntaxhighlight.textadept.lexer')
+
+local lex = lexer.new('text')
+
+lex:add_rule('whitespace', lexer.token(lexer.WHITESPACE, lexer.space^1))
+
+return lex

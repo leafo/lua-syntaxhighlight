@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- C++ LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('cpp')
 
@@ -13,26 +13,27 @@ local ws = token(lexer.WHITESPACE, lexer.space^1)
 lex:add_rule('whitespace', ws)
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  asm auto break case catch class const const_cast continue default delete do
-  dynamic_cast else explicit export extern false for friend goto if inline
-  mutable namespace new operator private protected public register
-  reinterpret_cast return sizeof static static_cast switch template this throw
-  true try typedef typeid typename using virtual volatile while
+lex:add_rule('keyword', token(lexer.KEYWORD, word_match{
+  'asm', 'auto', 'break', 'case', 'catch', 'class', 'const', 'const_cast', 'continue', 'default',
+  'delete', 'do', 'dynamic_cast', 'else', 'explicit', 'export', 'extern', 'false', 'for', 'friend',
+  'goto', 'if', 'inline', 'mutable', 'namespace', 'new', 'operator', 'private', 'protected',
+  'public', 'register', 'reinterpret_cast', 'return', 'sizeof', 'static', 'static_cast', 'switch',
+  'template', 'this', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename', 'using', 'virtual',
+  'volatile', 'while',
   -- Operators.
-  and and_eq bitand bitor compl not not_eq or or_eq xor xor_eq
+  'and', 'and_eq', 'bitand', 'bitor', 'compl', 'not', 'not_eq', 'or', 'or_eq', 'xor', 'xor_eq',
   -- C++11.
-  alignas alignof constexpr decltype final noexcept override static_assert
-  thread_local
-]]))
+  'alignas', 'alignof', 'constexpr', 'decltype', 'final', 'noexcept', 'override', 'static_assert',
+  'thread_local'
+}))
 
 -- Types.
-lex:add_rule('type', token(lexer.TYPE, word_match[[
-  bool char double enum float int long short signed struct union unsigned void
-  wchar_t
+lex:add_rule('type', token(lexer.TYPE, word_match{
+  'bool', 'char', 'double', 'enum', 'float', 'int', 'long', 'short', 'signed', 'struct', 'union',
+  'unsigned', 'void', 'wchar_t',
   -- C++11.
-  char16_t char32_t nullptr
-]]))
+  'char16_t', 'char32_t', 'nullptr'
+}))
 
 -- Strings.
 local sq_str = P('L')^-1 * lexer.range("'", true)
@@ -57,10 +58,8 @@ lex:add_rule('number', token(lexer.NUMBER, lexer.float + integer))
 -- Preprocessor.
 local include = token(lexer.PREPROCESSOR, '#' * S('\t ')^0 * 'include') *
   (ws * token(lexer.STRING, lexer.range('<', '>', true)))^-1
-local preproc = token(lexer.PREPROCESSOR, '#' * S('\t ')^0 * word_match[[
-  define elif else endif error if ifdef ifndef import line pragma undef using
-  warning
-]])
+local preproc = token(lexer.PREPROCESSOR, '#' * S('\t ')^0 *
+  word_match('define elif else endif error if ifdef ifndef import line pragma undef using warning'))
 lex:add_rule('preprocessor', include + preproc)
 
 -- Operators.
@@ -72,6 +71,6 @@ lex:add_fold_point(lexer.PREPROCESSOR, 'ifdef', 'endif')
 lex:add_fold_point(lexer.PREPROCESSOR, 'ifndef', 'endif')
 lex:add_fold_point(lexer.OPERATOR, '{', '}')
 lex:add_fold_point(lexer.COMMENT, '/*', '*/')
-lex:add_fold_point(lexer.COMMENT, '//', lexer.fold_line_comments('//'))
+lex:add_fold_point(lexer.COMMENT, lexer.fold_consecutive_lines('//'))
 
 return lex

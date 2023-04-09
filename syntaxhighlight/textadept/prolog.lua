@@ -1,5 +1,5 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- Lexer enhanced to conform to the realities of Prologs on the ground by
 -- Michael T. Richter.  Copyright is explicitly assigned back to Mitchell.
 -- Prolog LPeg lexer.
@@ -27,7 +27,7 @@ local lpeg = require('lpeg')
 local lexer = require('syntaxhighlight.textadept.lexer')
 
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S, B, V, C = lpeg.P, lpeg.R, lpeg.S, lpeg.B, lpeg.V, lpeg.C
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('prolog')
 
@@ -73,9 +73,9 @@ directives.swipl = directives.iso .. [[
 ]]
 lex:add_rule('directive',
   token(lexer.WHITESPACE, lexer.starts_line(S(' \t'))^0) *
-  token(lexer.OPERATOR, P':-') *
+  token(lexer.OPERATOR, ':-') *
   token(lexer.WHITESPACE, S(' \t')^0) *
-  token(lexer.PREPROCESSOR, P(word_match(directives[dialect]))))
+  token(lexer.PREPROCESSOR, word_match(directives[dialect])))
 
 -- Whitespace.
 lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
@@ -281,7 +281,7 @@ one_plus_arity_keywords.swipl = [[
 ]]
 lex:add_rule('keyword', token(lexer.KEYWORD,
   word_match(zero_arity_keywords[dialect]) +
-  (word_match(one_plus_arity_keywords[dialect]) * #(P'('))))
+  word_match(one_plus_arity_keywords[dialect]) * #P('(')))
 
 -- BIFs.
 local bifs = {}
@@ -304,12 +304,12 @@ bifs.swipl = [[
   nan pi popcount powm random random_float rational rationalize rdiv rem round
   sign sin sinh sqrt tan tanh truncate xor
 ]]
-lex:add_rule('bif', token(lexer.FUNCTION, word_match(bifs[dialect]) * #(P'(')))
+lex:add_rule('bif', token(lexer.FUNCTION, word_match(bifs[dialect]) * #P('(')))
 
 -- Numbers.
 local decimal_group = S('+-')^-1 * (lexer.digit + '_')^1
 local binary_number = '0b' * (S('01') + '_')^1
-local character_code = '0\'' * S('\\')^-1 * (lexer.print - lexer.space)
+local character_code = '0\'' * S('\\')^-1 * lexer.graph
 local decimal_number = decimal_group * ('.' * decimal_group)^-1 *
   ('e' * decimal_group)^-1
 local hexadecimal_number = '0x' * (lexer.xdigit + '_')^1

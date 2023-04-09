@@ -1,11 +1,11 @@
 local lpeg = require('lpeg')
--- Copyright 2013-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2013-2021 Mitchell. See LICENSE.
 -- Dart LPeg lexer.
 -- Written by Brian Schott (@Hackerpilot on Github).
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('dart')
 
@@ -13,17 +13,17 @@ local lex = lexer.new('dart')
 lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  assert break case catch class const continue default do else enum extends
-  false final finally for if in is new null rethrow return super switch this
-  throw true try var void while with
-]]))
+lex:add_rule('keyword', token(lexer.KEYWORD, word_match{
+  'assert', 'break', 'case', 'catch', 'class', 'const', 'continue', 'default', 'do', 'else', 'enum',
+  'extends', 'false', 'final', 'finally', 'for', 'if', 'in', 'is', 'new', 'null', 'rethrow',
+  'return', 'super', 'switch', 'this', 'throw', 'true', 'try', 'var', 'void', 'while', 'with'
+}))
 
 -- Built-ins.
-lex:add_rule('builtin', token(lexer.CONSTANT, word_match[[
-  abstract as dynamic export external factory get implements import library
-  operator part set static typedef
-]]))
+lex:add_rule('builtin', token(lexer.CONSTANT, word_match{
+  'abstract', 'as', 'dynamic', 'export', 'external', 'factory', 'get', 'implements', 'import',
+  'library', 'operator', 'part', 'set', 'static', 'typedef'
+}))
 
 -- Strings.
 local sq_str = S('r')^-1 * lexer.range("'", true)
@@ -47,11 +47,11 @@ lex:add_rule('operator', token(lexer.OPERATOR, S('#?=!<>+-*$/%&|^~.,;()[]{}')))
 
 -- Annotations.
 lex:add_rule('annotation', token('annotation', '@' * lexer.word^1))
-lex:add_style('annotation', lexer.STYLE_PREPROCESSOR)
+lex:add_style('annotation', lexer.styles.preprocessor)
 
 -- Fold points.
 lex:add_fold_point(lexer.OPERATOR, '{', '}')
 lex:add_fold_point(lexer.COMMENT, '/*', '*/')
-lex:add_fold_point(lexer.COMMENT, '//', lexer.fold_line_comments('//'))
+lex:add_fold_point(lexer.COMMENT, lexer.fold_consecutive_lines('//'))
 
 return lex

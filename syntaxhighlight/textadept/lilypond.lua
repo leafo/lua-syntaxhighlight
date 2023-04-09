@@ -1,11 +1,11 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Robert Gieseke. See License.txt.
+-- Copyright 2006-2021 Robert Gieseke. See LICENSE.
 -- Lilypond LPeg lexer.
 -- TODO Embed Scheme; Notes?, Numbers?
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('lilypond')
 

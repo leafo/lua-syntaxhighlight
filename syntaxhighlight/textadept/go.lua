@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- Go LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('go')
 
@@ -12,27 +12,26 @@ local lex = lexer.new('go')
 lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  break case chan const continue default defer else fallthrough for func go goto
-  if import interface map package range return select struct switch type var
-]]))
+lex:add_rule('keyword', token(lexer.KEYWORD, word_match{
+  'break', 'case', 'chan', 'const', 'continue', 'default', 'defer', 'else', 'fallthrough', 'for',
+  'func', 'go', 'goto', 'if', 'import', 'interface', 'map', 'package', 'range', 'return', 'select',
+  'struct', 'switch', 'type', 'var'
+}))
 
 -- Constants.
-lex:add_rule('constant', token(lexer.CONSTANT, word_match[[
-  true false iota nil
-]]))
+lex:add_rule('constant', token(lexer.CONSTANT, word_match('true false iota nil')))
 
 -- Types.
-lex:add_rule('type', token(lexer.TYPE, word_match[[
-  bool byte complex64 complex128 error float32 float64 int int8 int16 int32
-  int64 rune string uint uint8 uint16 uint32 uint64 uintptr
-]]))
+lex:add_rule('type', token(lexer.TYPE, word_match{
+  'bool', 'byte', 'complex64', 'complex128', 'error', 'float32', 'float64', 'int', 'int8', 'int16',
+  'int32', 'int64', 'rune', 'string', 'uint', 'uint8', 'uint16', 'uint32', 'uint64', 'uintptr'
+}))
 
 -- Functions.
-lex:add_rule('function', token(lexer.FUNCTION, word_match[[
-  append cap close complex copy delete imag len make new panic print println
-  real recover
-]]))
+lex:add_rule('function', token(lexer.FUNCTION, word_match{
+  'append', 'cap', 'close', 'complex', 'copy', 'delete', 'imag', 'len', 'make', 'new', 'panic',
+  'print', 'println', 'real', 'recover'
+}))
 
 -- Identifiers.
 lex:add_rule('identifier', token(lexer.IDENTIFIER, lexer.word))
@@ -57,6 +56,6 @@ lex:add_rule('operator', token(lexer.OPERATOR, S('+-*/%&|^<>=!:;.,()[]{}')))
 -- Fold points.
 lex:add_fold_point(lexer.OPERATOR, '{', '}')
 lex:add_fold_point(lexer.COMMENT, '/*', '*/')
-lex:add_fold_point(lexer.COMMENT, '//', lexer.fold_line_comments('//'))
+lex:add_fold_point(lexer.COMMENT, lexer.fold_consecutive_lines('//'))
 
 return lex

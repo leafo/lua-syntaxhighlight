@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2016-2020 Alejandro Baez (https://keybase.io/baez). See License.txt.
+-- Copyright 2016-2021 Alejandro Baez (https://keybase.io/baez). See LICENSE.
 -- Dockerfile LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('dockerfile', {fold_by_indentation = true})
 
@@ -12,17 +12,17 @@ local lex = lexer.new('dockerfile', {fold_by_indentation = true})
 lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE FROM LABEL MAINTAINER ONBUILD RUN
-  STOPSIGNAL USER VOLUME WORKDIR
-]]))
+lex:add_rule('keyword', token(lexer.KEYWORD, word_match{
+  'ADD', 'ARG', 'CMD', 'COPY', 'ENTRYPOINT', 'ENV', 'EXPOSE', 'FROM', 'LABEL', 'MAINTAINER',
+  'ONBUILD', 'RUN', 'STOPSIGNAL', 'USER', 'VOLUME', 'WORKDIR'
+}))
 
 -- Identifiers.
 lex:add_rule('identifier', token(lexer.IDENTIFIER, lexer.word))
 
 -- Variable.
-lex:add_rule('variable', token(lexer.VARIABLE, S('$')^1 *
-  (S('{')^1 * lexer.word * S('}')^1 + lexer.word)))
+lex:add_rule('variable',
+  token(lexer.VARIABLE, S('$')^1 * (P('{')^1 * lexer.word * P('}')^1 + lexer.word)))
 
 -- Strings.
 local sq_str = lexer.range("'", false, false)

@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- ANTLR LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('antlr')
 
@@ -12,18 +12,17 @@ local lex = lexer.new('antlr')
 lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
-  abstract break case catch continue default do else extends final finally for
-  if implements instanceof native new private protected public return static
-  switch synchronized throw throws transient try volatile
-  while package import header options tokens strictfp
-  false null super this true
-]]))
+lex:add_rule('keyword', token(lexer.KEYWORD, word_match{
+  'abstract', 'break', 'case', 'catch', 'continue', 'default', 'do', 'else', 'extends', 'final',
+  'finally', 'for', 'if', 'implements', 'instanceof', 'native', 'new', 'private', 'protected',
+  'public', 'return', 'static', 'switch', 'synchronized', 'throw', 'throws', 'transient', 'try',
+  'volatile', 'while', 'package', 'import', 'header', 'options', 'tokens', 'strictfp', 'false',
+  'null', 'super', 'this', 'true'
+}))
 
 -- Types.
-lex:add_rule('type', token(lexer.TYPE, word_match[[
-  boolean byte char class double float int interface long short void
-]]))
+lex:add_rule('type', token(lexer.TYPE, word_match(
+  'boolean byte char class double float int interface long short void')))
 
 -- Functions.
 lex:add_rule('func', token(lexer.FUNCTION, 'assert'))
@@ -37,9 +36,10 @@ local block_comment = lexer.range('/*', '*/')
 lex:add_rule('comment', token(lexer.COMMENT, line_comment + block_comment))
 
 -- Actions.
-lex:add_rule('action', token(lexer.OPERATOR, P('{')) *
-  token('action', (1 - P('}'))^0) * token(lexer.OPERATOR, P('}'))^-1)
-lex:add_style('action', lexer.STYLE_NOTHING)
+local open_brace = token(lexer.OPERATOR, '{')
+local close_brace = token(lexer.OPERATOR, '}')
+lex:add_rule('action', open_brace * token('action', (1 - P('}'))^0) * close_brace^-1)
+lex:add_style('action', lexer.styles.nothing)
 
 -- Strings.
 lex:add_rule('string', token(lexer.STRING, lexer.range("'", true)))
@@ -52,6 +52,6 @@ lex:add_fold_point(lexer.OPERATOR, ':', ';')
 lex:add_fold_point(lexer.OPERATOR, '(', ')')
 lex:add_fold_point(lexer.OPERATOR, '{', '}')
 lex:add_fold_point(lexer.COMMENT, '/*', '*/')
-lex:add_fold_point(lexer.COMMENT, '//', lexer.fold_line_comments('//'))
+lex:add_fold_point(lexer.COMMENT, lexer.fold_consecutive_lines('//'))
 
 return lex
