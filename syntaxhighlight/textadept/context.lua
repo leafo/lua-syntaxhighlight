@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Robert Gieseke, Lars Otter. See License.txt.
+-- Copyright 2006-2021 Robert Gieseke, Lars Otter. See LICENSE.
 -- ConTeXt LPeg lexer.
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local lex = lexer.new('context')
 
@@ -19,25 +19,20 @@ lex:add_rule('whitespace', token(lexer.WHITESPACE, lexer.space^1))
 lex:add_rule('comment', token(lexer.COMMENT, lexer.to_eol('%')))
 
 -- Sections.
-local wm_section = word_match[[
-  chapter part section subject subsection subsubject subsubsection subsubsubject
-  subsubsubsection subsubsubsubject title
-]]
-local section = token(lexer.CLASS, '\\' *
-  (wm_section + (startstop * wm_section)))
+local wm_section = word_match{
+  'chapter', 'part', 'section', 'subject', 'subsection', 'subsubject', 'subsubsection',
+  'subsubsubject', 'subsubsubsection', 'subsubsubsubject', 'title'
+}
+local section = token(lexer.CLASS, '\\' * startstop^-1 * wm_section)
 lex:add_rule('section', section)
 
 -- TeX and ConTeXt mkiv environments.
-local environment = token(lexer.STRING, '\\' * (beginend + startstop) *
-  lexer.alpha^1)
+local environment = token(lexer.STRING, '\\' * (beginend + startstop) * lexer.alpha^1)
 lex:add_rule('environment', environment)
 
 -- Commands.
-local command = token(lexer.KEYWORD, '\\' * (
-  lexer.alpha^1 * P('\\') * lexer.space^1 +
-  lexer.alpha^1 +
-  S('!"#$%&\',./;=[\\]_{|}~`^-')
-))
+local command = token(lexer.KEYWORD, '\\' *
+  (lexer.alpha^1 * P('\\') * lexer.space^1 + lexer.alpha^1 + S('!"#$%&\',./;=[\\]_{|}~`^-')))
 lex:add_rule('command', command)
 
 -- Operators.
@@ -48,7 +43,7 @@ lex:add_rule('operator', operator)
 lex:add_fold_point('environment', '\\start', '\\stop')
 lex:add_fold_point('environment', '\\begin', '\\end')
 lex:add_fold_point(lexer.OPERATOR, '{', '}')
-lex:add_fold_point(lexer.COMMENT, '%', lexer.fold_line_comments('%'))
+lex:add_fold_point(lexer.COMMENT, lexer.fold_consecutive_lines('%'))
 
 -- Embedded Lua.
 local luatex = lexer.load('lua')

@@ -3,7 +3,7 @@
 
 ![test](https://github.com/leafo/lua-syntaxhighlight/workflows/test/badge.svg)
 
-Highlights code into HTML using lexers from [Textadept](https://foicica.com/textadept/).
+Highlights code into HTML using lexers from [Scintillua](https://github.com/orbitalquark/scintillua) (a component of Textadept/Scintilla).
 
 
 ```lua
@@ -55,7 +55,7 @@ Options:
 
 The MIT License
 
-Copyright (c) 2007-2019 Mitchell
+Copyright (c) 2006-2021 Mitchell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

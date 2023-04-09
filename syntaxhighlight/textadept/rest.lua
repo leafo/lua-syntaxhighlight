@@ -1,10 +1,10 @@
 local lpeg = require('lpeg')
--- Copyright 2006-2020 Mitchell mitchell.att.foicica.com. See License.txt.
+-- Copyright 2006-2021 Mitchell. See LICENSE.
 -- reStructuredText LPeg lexer.
 
 local l = require('syntaxhighlight.textadept.lexer')
 local token, word_match, starts_line = l.token, l.word_match, l.starts_line
-local P, R, S = lpeg.P, lpeg.R, lpeg.S
+local P, S = lpeg.P, lpeg.S
 
 local M = {_NAME = 'rest'}
 
@@ -29,7 +29,7 @@ local overline = lpeg.Cmt(starts_line(adornment), function(input, index, adm, c)
   return #input + 1
 end)
 local underline = lpeg.Cmt(starts_line(adornment), function(_, index, adm, c)
-  local pos = adm:match('^%' .. c .. '+()%s*$')
+  local pos = adm:match('^%' .. c .. '+%s*()$')
   return pos and index - #adm + pos - 1 or nil
 end)
 -- Token needs to be a predefined one in order for folder to work.
@@ -144,8 +144,8 @@ local substitution = #prefix * token('substitution',
 local line_comment = l.to_eol(prefix)
 local bprefix = any_indent * '..'
 local block_comment = bprefix * l.newline * indented_block
-local comment = #bprefix * token(l.COMMENT,
-  starts_line(line_comment + block_comment))
+local comment = #bprefix * token(l.COMMENT, starts_line(line_comment +
+  block_comment))
 
 -- Inline markup.
 local em = token('em', l.range('*'))
