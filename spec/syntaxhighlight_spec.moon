@@ -81,6 +81,11 @@ jobs:
     out = require("syntaxhighlight").highlight_to_html "nginx", [[location /home { return 404; }]], bare: true
     assert.same [[<span class="sh_keyword">location</span><span class="sh_string"> /home</span><span class="sh_default"> { return </span><span class="sh_number">404</span><span class="sh_default">; }</span>]], out
 
+  it "highlights console sessions", ->
+    out = require("syntaxhighlight").highlight_to_html "console", "$ moonc hello.moon\nBuilt ./hello.moon", bare: true
+    assert.same [[<span class="sh_prompt sh_keyword">$ </span><span class="sh_identifier">moonc</span> <span class="sh_identifier">hello</span><span class="sh_operator">.</span><span class="sh_identifier">moon</span>
+<span class="sh_output sh_comment">Built ./hello.moon</span>]], out
+
   it "highlights etlua with embedded lua", ->
     out = require("syntaxhighlight").highlight_to_html "etlua", [[<b><%= user:name() %></b><%- raw %><% end %>]], bare: true
     assert.same [[<span class="sh_element sh_keyword">&lt;b&gt;</span><span class="sh_etlua_tag sh_embedded">&lt;%=</span> <span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">name</span><span class="sh_operator">()</span> <span class="sh_etlua_tag sh_embedded">%&gt;</span><span class="sh_element sh_keyword">&lt;/b&gt;</span><span class="sh_etlua_tag sh_embedded">&lt;%-</span> <span class="sh_identifier">raw</span> <span class="sh_etlua_tag sh_embedded">%&gt;&lt;%</span> <span class="sh_keyword">end</span> <span class="sh_etlua_tag sh_embedded">%&gt;</span>]], out

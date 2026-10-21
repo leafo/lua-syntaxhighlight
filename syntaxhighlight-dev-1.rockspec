@@ -15,6 +15,7 @@ build = {
   type = "builtin",
   modules = {
     ["syntaxhighlight"] = "syntaxhighlight/init.lua",
+    ["syntaxhighlight.lexers.console"] = "syntaxhighlight/lexers/console.lua",
     ["syntaxhighlight.lexers.etlua"] = "syntaxhighlight/lexers/etlua.lua",
     ["syntaxhighlight.lexers.moonscript"] = "syntaxhighlight/lexers/moonscript.lua",
     ["syntaxhighlight.lexers.nginx"] = "syntaxhighlight/lexers/nginx.lua",
