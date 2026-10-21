@@ -79,7 +79,13 @@ jobs:
 
   it "highlights nginx (a lexer only provided in this library)", ->
     out = require("syntaxhighlight").highlight_to_html "nginx", [[location /home { return 404; }]], bare: true
-    assert.same [[<span class="sh_keyword">location</span><span class="sh_string"> /home</span><span class="sh_default"> { return </span><span class="sh_number">404</span><span class="sh_default">; }</span>]], out
+    assert.same [[<span class="sh_keyword">location</span> <span class="sh_string">/home</span> <span class="sh_operator">{</span> <span class="sh_function">return</span> <span class="sh_number">404</span><span class="sh_operator">;</span> <span class="sh_operator">}</span>]], out
+
+  it "highlights nginx variables and embedded lua", ->
+    out = require("syntaxhighlight").highlight_to_html "nginx", "listen ${{port}};\nlocation ~ ^/s/(.*) { alias s/$1; }\ncontent_by_lua_block { local t = { 1 } }", bare: true
+    assert.same [[<span class="sh_function">listen</span> <span class="sh_variable sh_label">${{port}}</span><span class="sh_operator">;</span>
+<span class="sh_keyword">location</span> <span class="sh_string">~ ^/s/(.*)</span> <span class="sh_operator">{</span> <span class="sh_function">alias</span> <span class="sh_identifier">s/</span><span class="sh_variable sh_label">$1</span><span class="sh_operator">;</span> <span class="sh_operator">}</span>
+<span class="sh_function">content_by_lua_block</span> <span class="sh_operator">{</span> <span class="sh_keyword">local</span> <span class="sh_identifier">t</span> <span class="sh_operator">=</span> <span class="sh_operator">{</span> <span class="sh_number">1</span> <span class="sh_operator">}</span> <span class="sh_operator">}</span>]], out
 
   it "highlights sql operators, functions, and postgres syntax", ->
     out = require("syntaxhighlight").highlight_to_html "sql", "select count(*), count from t where x::int > ? and name ilike $1 returning id;", bare: true
