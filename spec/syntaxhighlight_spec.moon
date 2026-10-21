@@ -81,6 +81,10 @@ jobs:
     out = require("syntaxhighlight").highlight_to_html "nginx", [[location /home { return 404; }]], bare: true
     assert.same [[<span class="sh_keyword">location</span><span class="sh_string"> /home</span><span class="sh_default"> { return </span><span class="sh_number">404</span><span class="sh_default">; }</span>]], out
 
+  it "highlights sql operators, functions, and postgres syntax", ->
+    out = require("syntaxhighlight").highlight_to_html "sql", "select count(*), count from t where x::int > ? and name ilike $1 returning id;", bare: true
+    assert.same [[<span class="sh_keyword">select</span> <span class="sh_function">count</span><span class="sh_operator">(*),</span> <span class="sh_identifier">count</span> <span class="sh_keyword">from</span> <span class="sh_identifier">t</span> <span class="sh_keyword">where</span> <span class="sh_identifier">x</span><span class="sh_operator">::</span><span class="sh_keyword">int</span> <span class="sh_operator">&gt;</span> <span class="sh_operator">?</span> <span class="sh_keyword">and</span> <span class="sh_identifier">name</span> <span class="sh_keyword">ilike</span> <span class="sh_variable">$1</span> <span class="sh_keyword">returning</span> <span class="sh_identifier">id</span><span class="sh_operator">;</span>]], out
+
   it "highlights console sessions", ->
     out = require("syntaxhighlight").highlight_to_html "console", "$ moonc hello.moon\nBuilt ./hello.moon", bare: true
     assert.same [[<span class="sh_prompt sh_keyword">$ </span><span class="sh_identifier">moonc</span> <span class="sh_identifier">hello</span><span class="sh_operator">.</span><span class="sh_identifier">moon</span>

@@ -19,6 +19,7 @@ build = {
     ["syntaxhighlight.lexers.etlua"] = "syntaxhighlight/lexers/etlua.lua",
     ["syntaxhighlight.lexers.moonscript"] = "syntaxhighlight/lexers/moonscript.lua",
     ["syntaxhighlight.lexers.nginx"] = "syntaxhighlight/lexers/nginx.lua",
+    ["syntaxhighlight.lexers.sql"] = "syntaxhighlight/lexers/sql.lua",
     ["syntaxhighlight.lexers.vim"] = "syntaxhighlight/lexers/vim.lua",
     ["syntaxhighlight.textadept.actionscript"] = "syntaxhighlight/textadept/actionscript.lua",
     ["syntaxhighlight.textadept.ada"] = "syntaxhighlight/textadept/ada.lua",
