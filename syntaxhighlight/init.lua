@@ -206,5 +206,5 @@ end
 return {
   lexers = lexers,
   highlight_to_html = highlight_to_html,
-  VERSION = "1.0.0"
+  VERSION = "1.1.0"
 }
