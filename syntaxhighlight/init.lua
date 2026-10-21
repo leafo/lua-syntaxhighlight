@@ -182,7 +182,7 @@ highlight_to_html = function(language, code, opts)
     local _des_0 = tagged_tokens[_index_0]
     local chunk_type, chunk
     chunk_type, chunk = _des_0[1], _des_0[2]
-    if chunk_type == "whitespace" then
+    if chunk_type:match("whitespace$") then
       table.insert(buffer, escape_text:match(chunk))
     else
       local classes = classes_for_chunk_type(lex, chunk_type, cache)

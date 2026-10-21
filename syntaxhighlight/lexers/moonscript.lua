@@ -4,12 +4,13 @@ local lpeg = require('lpeg')
 
 local lexer = require('syntaxhighlight.textadept.lexer')
 local token, word_match = lexer.token, lexer.word_match
-local P, S, R = lpeg.P, lpeg.S, lpeg.R
+local P, S, R, V = lpeg.P, lpeg.S, lpeg.R, lpeg.V
 
 local lex = lexer.new('moonscript', {fold_by_indentation = true})
 
 -- Whitespace.
-lex:add_rule('whitspace', token(lexer.WHITESPACE, lexer.space^1))
+local ws = token(lexer.WHITESPACE, lexer.space^1)
+lex:add_rule('whitespace', ws)
 
 -- table keys have higher precedence than keywords
 local tbl_key = token('tbl_key', lexer.word * ':' + ':' * lexer.word )
@@ -17,39 +18,45 @@ lex:add_rule('tbl_key', tbl_key)
 lex:add_style('tbl_key', lexer.STYLE_REGEX)
 
 -- Keywords.
-lex:add_rule('keyword', token(lexer.KEYWORD, word_match[[
+local keyword = token(lexer.KEYWORD, word_match[[
   -- Lua.
-  and break do else elseif false for if in local nil not or return then true
-  while
+  and break do else elseif for if in local not or return then while
   -- Moonscript.
   continue class export extends from import super switch unless using when with
-]]))
+]])
+lex:add_rule('keyword', keyword)
 
 -- Error words.
-lex:add_rule('error', token(lexer.ERROR, word_match[[function end]]))
+local error_word = token(lexer.ERROR, word_match[[function end]])
+lex:add_rule('error', error_word)
 
 -- Self reference.
-lex:add_rule('self_ref', token('self_ref', '@' * lexer.word^-1 + 'self'))
+local self_ref = token('self_ref',
+  '@@' * lexer.word^-1 + '@' * lexer.word^-1 + word_match[[self]])
+lex:add_rule('self_ref', self_ref)
 lex:add_style('self_ref', lexer.STYLE_LABEL)
 
 -- Functions.
-lex:add_rule('function', token(lexer.FUNCTION, word_match[[
+local func = token(lexer.FUNCTION, word_match[[
   assert collectgarbage dofile error getmetatable ipairs load loadfile next
   pairs pcall print rawequal rawget rawset require select setmetatable tonumber
   tostring type xpcall
   -- Added in 5.2.
   rawlen
-]]))
+]])
+lex:add_rule('function', func)
 
 -- Constants.
-lex:add_rule('constant', token(lexer.CONSTANT, word_match[[
+local constant = token(lexer.CONSTANT, word_match[[
+  nil true false
   _G _VERSION
   -- Added in 5.2.
   _ENV
-]]))
+]])
+lex:add_rule('constant', constant)
 
 -- Libraries.
-lex:add_rule('library', token('library', word_match[[
+local library = token('library', word_match[[
   -- Coroutine.
   coroutine coroutine.create coroutine.resume coroutine.running coroutine.status
   coroutine.wrap coroutine.yield
@@ -92,19 +99,8 @@ lex:add_rule('library', token('library', word_match[[
   debug.setlocal debug.setmetatable debug.setupvalue debug.traceback
   -- Debug added in 5.2.
   debug.getuservalue debug.setuservalue debug.upvalueid debug.upvaluejoin
-
-  --- MoonScript 0.3.1 standard library.
-  -- Printing functions.
-  p
-  -- Table functions.
-  run_with_scope defaultbl extend copy
-  -- Class/object functions.
-  is_object bind_methods mixin mixin_object mixin_table
-  -- Misc functions.
-  fold
-  -- Debug functions.
-  debug.upvalue
-]]))
+]])
+lex:add_rule('library', library)
 lex:add_style('library', lexer.STYLE_TYPE)
 
 -- Identifiers.
@@ -119,28 +115,54 @@ local longstring = lpeg.Cmt('[' * lpeg.C(P('=')^0) * '[',
     return (e or #input) + 1
   end)
 
--- Strings.
-local sq_str = lexer.range("'")
-local dq_str = lexer.range('"')
-lex:add_rule('string', token(lexer.STRING, sq_str + dq_str) +
-  token('longstring', longstring))
+local comment = token(lexer.COMMENT, '--' * longstring + lexer.to_eol('--'))
+-- LuaJIT 64 bit integer literals take a LL or ULL suffix
+local number = token(lexer.NUMBER, lexer.number * (S('uU')^-1 * S('lL') * S('lL'))^-1)
+local fndef = token('fndef', P('->') + '=>')
+local operator = token(lexer.OPERATOR, S('+-*!\\/%^#=<>;:,.~|&'))
+
+-- braces are separate tokens so an interpolation can find its closing brace
+local paren = token('symbol', S('()[]'))
+local brace_open = token('symbol', '{')
+local brace_close = token('symbol', '}')
+
+-- Strings. A double quoted string can interpolate any expression with #{},
+-- including other strings, so it needs a recursive grammar that reuses the
+-- token patterns above for the embedded code
+local sq_str = token(lexer.STRING, lexer.range("'"))
+local long_str = token('longstring', longstring)
+local dq_char = '\\' * P(1) + (1 - S('"\\#')) + '#' * -P('{')
+
+local dq_str = P{
+  'dq_str',
+  dq_str = token(lexer.STRING, '"') *
+    (V('interpolation') + token(lexer.STRING, dq_char^1))^0 *
+    token(lexer.STRING, P('"')^-1),
+  interpolation = token('interpolation', '#{') * V('code')^0 *
+    token('interpolation', '}')^-1,
+  braces = brace_open * V('code')^0 * brace_close^-1,
+  code = ws + tbl_key + keyword + error_word + self_ref + func + constant +
+    library + proper_ident + identifier + sq_str + V('dq_str') + long_str +
+    comment + number + fndef + operator + paren + V('braces'),
+}
+
+lex:add_rule('string', sq_str + dq_str + long_str)
 lex:add_style('longstring', lexer.STYLE_STRING)
+lex:add_style('interpolation', lexer.STYLE_EMBEDDED)
 
 -- Comments.
-local line_comment = lexer.to_eol('--')
-local block_comment = '--' * longstring
-lex:add_rule('comment', token(lexer.COMMENT, block_comment + line_comment))
+lex:add_rule('comment', comment)
 
 -- Numbers.
-lex:add_rule('number', token(lexer.NUMBER, lexer.number))
+lex:add_rule('number', number)
 
 -- Function definition.
-lex:add_rule('fndef', token('fndef', P('->') + '=>'))
+lex:add_rule('fndef', fndef)
 lex:add_style('fndef', lexer.STYLE_PREPROCESSOR)
 
 -- Operators.
-lex:add_rule('operator', token(lexer.OPERATOR, S('+-*!\\/%^#=<>;:,.')))
-lex:add_rule('symbol', token('symbol', S('(){}[]')))
+lex:add_rule('operator', operator)
+lex:add_rule('symbol', paren + brace_open + brace_close)
 lex:add_style('symbol', lexer.STYLE_EMBEDDED)
 
 return lex

@@ -144,7 +144,9 @@ highlight_to_html = (language, code, opts={}) ->
     table.insert buffer, 'highlight">'
 
   for {chunk_type, chunk} in *tagged_tokens
-    if chunk_type == "whitespace"
+    -- the lexer names whitespace per language (eg. lua_whitespace) to support
+    -- embedding one language in another
+    if chunk_type\match "whitespace$"
       table.insert buffer, escape_text\match chunk
     else
       classes = classes_for_chunk_type lex, chunk_type, cache
